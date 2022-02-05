@@ -1,5 +1,5 @@
 .header {
-  padding: 18px 70px;
+  padding: 18px 30px 38px 30px;
   display: flex;
 }
 
@@ -21,10 +21,13 @@
   width: 38px;
   height: 38px;
 }
+.header__mobile-menu {
+  display: flex;
+}
 
 @media screen and (max-width: 1023px) {
   .header {
-    padding: 21px 30px;
+    padding: 21px 30px 41px 21px;
   }
   .header__mobile-menu-button {
     background-image: url('../../images/menu-mobile-icon.svg');
@@ -35,15 +38,20 @@
   .header__container {
     display: none;
   }
+
 }
 
 @media screen and (max-width: 767px) {
   .header {
     margin: 0 auto;
-    max-width: 320px;
-    padding: 15px 14px 16px 15px;
+    padding: 15px 14px 43px 15px;
   }
   .header__logo {
     margin: 0;
   }
 }
+
+@media screen and (min-width: 1024px) {
+.header__mobile-menu {
+  display: none;
+}}

@@ -1,7 +1,7 @@
 import React from 'react';
 import './HeaderButton.css';
 import { Link } from 'react-router-dom';
-function HeaderButton({ title, link, background }) {
+function HeaderButton({ title, link, background, menuStyle }) {
   return (
     <Link
       style={
@@ -12,7 +12,7 @@ function HeaderButton({ title, link, background }) {
           : { backgroundColor: '#FFFFFF' }
       }
       to={link}
-      className="header-button"
+      className={`header-button ${menuStyle && 'header-button__menu'}`}
     >
       {title}
     </Link>
