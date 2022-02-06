@@ -17,7 +17,31 @@
 @media screen and (max-width: 767px) {
   .navTab {
     width: 82px;
-  height: 26px;
-  margin-right: 6px;
+    height: 26px;
+    margin-right: 6px;
+  }
+}
+
+.navTab__techs {
+  width: 90px;
+  height: 60px;
+}
+
+@media screen and (max-width: 1023px) {
+  .navTab__techs {
+    width: 84px;
+    height: 57px;
+  }
+
+  .navTab__techs {
+    width: 84px;
+    height: 57px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .navTab__techs {
+    margin-right: 10px;
+    margin-bottom: 10px;
   }
 }

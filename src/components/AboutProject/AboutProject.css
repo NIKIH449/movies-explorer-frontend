@@ -1,0 +1,125 @@
+.about-project {
+  padding: 110px 30px 100px 30px;
+  display: flex;
+  flex-direction: column;
+}
+
+.about-project__title {
+  font-family: Inter;
+  font-size: 22px;
+  line-height: 27px;
+  letter-spacing: -0.04em;
+  padding-bottom: 23px;
+  border-bottom: 1px solid black;
+}
+
+.about-project__container {
+  display: flex;
+  padding: 70px 0 110px;
+  justify-content: space-between;
+}
+
+.about-project__paragraph-heading {
+  font-family: Inter;
+  font-size: 20px;
+  line-height: 24px;
+  letter-spacing: -0.04em;
+  margin: 0 0 26px;
+}
+
+.about-project__paragraph {
+  font-family: Inter;
+  font-size: 14px;
+  line-height: 20px;
+  margin: 0;
+}
+
+.about-project__bar {
+  height: 36px;
+  font-family: Inter;
+  font-size: 14px;
+  line-height: 17px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.about-project__bar-panel {
+  display: grid;
+  grid-template-columns: 20% 80%;
+}
+
+.about-project__bar_type_backend {
+  background-color: #2be080;
+}
+
+.about-project__bar_type_frontend {
+  background-color: #f2f2f2;
+}
+
+.about-project__bar_tech {
+  font-family: Suisse Intl;
+
+  font-size: 14px;
+  line-height: 17px;
+  margin: 0;
+  color: #a0a0a0;
+  order: 1;
+  text-align: center;
+  padding-top: 14px;
+}
+
+@media screen and (max-width: 1023px) {
+  .about-project__bar {
+    font-size: 14px;
+    line-height: 17px;
+  }
+  .about-project__paragraph {
+    font-size: 12px;
+    line-height: 18px;
+  }
+  .about-project__paragraph-heading {
+    margin: 0 0 22px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .about-project__title {
+    font-size: 18px;
+    line-height: 22px;
+  }
+  .about-project__paragraph-heading {
+    margin-bottom: 18px;
+    font-size: 18px;
+    line-height: 22px;
+  }
+  .about-project__paragraph {
+    font-size: 11px;
+    line-height: 16px;
+    margin-bottom: 56px;
+  }
+  .about-project__bar-panel {
+    grid-template-columns: 35.21% 64.79%;
+  }
+  .about-project__bar {
+    grid-template-columns: 35.21% 64.79%;
+    font-size: 11px;
+    line-height: 13px;
+  }
+  .about-project__bar_tech {
+    font-size: 11px;
+    line-height: 13px;
+  }
+  .about-project__container {
+    display: flex;
+    padding: 60px 0 4px 0;
+    flex-direction: column;
+  }
+  .about-project {
+    padding: 70px 18px;
+  }
+  .about-project__info {
+    margin: 0;
+  }
+}

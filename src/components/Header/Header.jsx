@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import MobileMenu from '../Modals/MobileMenu';
 import './Header.css';
-import HeaderButton from './HeaderButton/HeaderButton';
+import Navigation from '../Navigation/Navigation';
 function Header({ loggedIn }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -17,8 +17,8 @@ function Header({ loggedIn }) {
         <div className="header__container">
           {loggedIn && (
             <>
-              <HeaderButton link="/mobies" title="Фильмы" />
-              <HeaderButton link="/saved-movies" title="Сохраненные фильмы" />
+              <Navigation link="/mobies" title="Фильмы" />
+              <Navigation link="/saved-movies" title="Сохраненные фильмы" />
             </>
           )}
         </div>
@@ -26,23 +26,25 @@ function Header({ loggedIn }) {
         <div className="header__container">
           {!loggedIn ? (
             <>
-              <HeaderButton link="/signup" title="Регистрация" />
-              <HeaderButton background="signin" link="/signin" title="Войти" />
+              <Navigation link="/signup" title="Регистрация" />
+              <div className="header__login-button">
+                <Navigation link="/signin" title="Войти" />
+              </div>
             </>
           ) : (
-            <HeaderButton
-              background="profile"
-              link="/profile"
-              title="Аккаунт"
-            />
+            <div className="header__profile-button">
+              <Navigation link="/profile" title="Аккаунт" />
+            </div>
           )}
         </div>
       </nav>
       <div className="header__mobile-menu">
         {!loggedIn ? (
           <>
-            <HeaderButton link="/signup" title="Регистрация" />
-            <HeaderButton background="signin" link="/signin" title="Войти" />
+            <Navigation link="/signup" title="Регистрация" />
+            <div className="header__login-button">
+              <Navigation link="/signin" title="Войти" />
+            </div>
           </>
         ) : (
           <div

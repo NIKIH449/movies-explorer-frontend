@@ -1,4 +1,4 @@
-.header-button {
+.navigation {
   text-decoration: none;
   color: #000000;
   margin-right: 30px;
@@ -14,20 +14,19 @@
   flex-direction: row;
 }
 
-.header-button:last-child {
+.navigation:last-child {
   margin-right: 0;
-  padding: 0 20px;
 }
 
 @media screen and (max-width: 1023px) {
-  .header-button {
+  .navigation {
     height: 32px;
   }
-  .header-button:hover {
+  .navigation:hover {
     text-decoration: solid underline black 2px;
     text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   }
-  .header-button__menu {
+  .navigation__menu {
     margin: 0;
     font-size: 18px;
     line-height: 22px;
@@ -35,13 +34,13 @@
 }
 
 @media screen and (max-width: 767px) {
-  .header-button {
+  .navigation {
     height: 26px;
     font-weight: 500;
     font-size: 10px;
     margin-right: 14px;
   }
-  .header-button__menu {
+  .navigation__menu {
     margin: 0 0 24px 0;
     font-size: 18px;
     line-height: 22px;

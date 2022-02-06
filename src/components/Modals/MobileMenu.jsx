@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import './MobileMenu.css';
 import { createPortal } from 'react-dom';
-import HeaderButton from '../Header/HeaderButton/HeaderButton';
+import Navigation from '../Navigation/Navigation';
 
 function MobileMenu({ onClose, children }) {
   useEffect(() => {
@@ -16,20 +16,19 @@ function MobileMenu({ onClose, children }) {
 
   return createPortal(
     <div className="mobile-menu">
-      <nav className="mobile-menu_navigation">
-        <div className="mobile-menu_container">
-          <HeaderButton menuStyle link="/" title="Главная" />
-          <HeaderButton menuStyle link="/mobies" title="Фильмы" />
-          <HeaderButton
+      <nav className="mobile-menu__navigation">
+        <div className="mobile-menu__container">
+          <Navigation menuStyle link="/" title="Главная" />
+          <Navigation menuStyle link="/mobies" title="Фильмы" />
+          <Navigation
             menuStyle
             link="/saved-movies"
             title="Сохраненные фильмы"
           />
         </div>
-        <div className="mobile-menu_container">
-          <HeaderButton
+        <div className="mobile-menu__container">
+          <Navigation
             menuStyle
-            background="profile"
             link="/profile"
             title="Аккаунт"
           />
