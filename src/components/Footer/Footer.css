@@ -37,14 +37,24 @@
   color: black;
   margin: 0 25px 0 0;
 }
-
+.footer__link:hover {
+  text-decoration: underline;
+}
 .footer__link:last-child {
   margin: 0;
 }
 .footer__date-mobile {
   display: none;
 }
+@media screen and (max-width: 1023px) {
+  .footer {
+    padding: 80px 30px 20px 30px;
+  }
+}
 @media screen and (max-width: 767px) {
+  .footer {
+    padding: 80px 10px 10px 10px;
+  }
   .footer__container {
     padding-top: 30px;
     flex-direction: column;
@@ -57,6 +67,7 @@
   .footer__link {
     margin: 0 0 12px 0;
   }
+
   .footer__date {
     display: none;
   }

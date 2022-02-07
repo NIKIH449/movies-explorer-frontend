@@ -1,5 +1,5 @@
 .about-project {
-  padding: 110px 30px 100px 30px;
+  padding: 110px 70px 100px 70px;
   display: flex;
   flex-direction: column;
 }
@@ -11,6 +11,7 @@
   letter-spacing: -0.04em;
   padding-bottom: 23px;
   border-bottom: 1px solid black;
+  margin: 0;
 }
 
 .about-project__container {
@@ -71,6 +72,9 @@
 }
 
 @media screen and (max-width: 1023px) {
+  .about-project {
+    padding: 110px 50px 100px 50px;
+  }
   .about-project__bar {
     font-size: 14px;
     line-height: 17px;
@@ -117,7 +121,7 @@
     flex-direction: column;
   }
   .about-project {
-    padding: 70px 18px;
+    padding: 70px 0px;
   }
   .about-project__info {
     margin: 0;

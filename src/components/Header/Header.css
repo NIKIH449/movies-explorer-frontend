@@ -1,5 +1,5 @@
 .header {
-  padding: 18px 30px 38px 30px;
+  padding: 18px 70px 38px 70px;
   display: flex;
 }
 
@@ -44,7 +44,7 @@
 
 @media screen and (max-width: 1023px) {
   .header {
-    padding: 21px 30px 41px 21px;
+    padding: 21px 30px 41px 30px;
   }
   .header__mobile-menu-button {
     background-image: url('../../images/menu-mobile-icon.svg');
