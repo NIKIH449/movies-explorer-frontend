@@ -17,7 +17,7 @@ function Header({ loggedIn }) {
         <div className="header__container">
           {loggedIn && (
             <>
-              <Navigation link="/mobies" title="Фильмы" />
+              <Navigation link="/movies" title="Фильмы" />
               <Navigation link="/saved-movies" title="Сохраненные фильмы" />
             </>
           )}

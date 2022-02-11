@@ -101,8 +101,9 @@
 
 @media screen and (max-width: 767px) {
   .about-me {
-    padding: 70px 0;
+    padding: 70px 14px;
   }
+
   .about-me__container {
     flex-direction: column-reverse;
     width: 100%;

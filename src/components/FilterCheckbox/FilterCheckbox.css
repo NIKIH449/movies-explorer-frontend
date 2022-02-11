@@ -1,0 +1,39 @@
+.filterCheckbox {
+  width: 36px;
+  height: 20px;
+  background: #c4c4c4;
+  border-radius: 20px;
+  margin: 0 14px 0 29px;
+  padding: 0 2px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.filterCheckbox_active {
+  background: #2be080;
+  transition: 0.4s;
+}
+
+.filterCheckbox__slider {
+  border-radius: 50px;
+  background-color: white;
+  width: 16px;
+  height: 16px;
+  transition: 0.4s;
+}
+.filterCheckbox__slider_active {
+  transition: 0.4s;
+  transform: translateX(20px);
+}
+
+@media screen and (max-width: 1023px) {
+  .filterCheckbox {
+    margin: 0 15px 0 19px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .filterCheckbox {
+    margin: 0 15px 0 19px;
+  }
+}
