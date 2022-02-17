@@ -2,7 +2,6 @@
   text-decoration: none;
   color: #000000;
   margin-right: 30px;
-  font-family: Inter;
   font-weight: 500;
   font-size: 12px;
   line-height: 16px;
@@ -12,12 +11,19 @@
   justify-content: center;
   align-items: center;
   flex-direction: row;
+  transition: 0.4s;
 }
-
+.navigation:hover {
+  font-size: 15px;
+}
 .navigation:last-child {
   margin-right: 0;
 }
-
+.navigation__notFound {
+  color: #2be080;
+  font-size: 14px;
+  line-height: 17px;
+}
 @media screen and (max-width: 1023px) {
   .navigation {
     height: 32px;
@@ -30,6 +36,9 @@
     margin: 0;
     font-size: 18px;
     line-height: 22px;
+  }
+  .navigation__menu:hover {
+    font-size: 19px;
   }
 }
 
@@ -44,5 +53,8 @@
     margin: 0 0 24px 0;
     font-size: 18px;
     line-height: 22px;
+  }
+  .navigation:hover {
+    font-size: 11px;
   }
 }

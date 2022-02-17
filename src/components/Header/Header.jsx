@@ -2,17 +2,16 @@ import React, { useState } from 'react';
 import MobileMenu from '../Modals/MobileMenu';
 import './Header.css';
 import Navigation from '../Navigation/Navigation';
+import { useNavigate } from 'react-router';
 function Header({ loggedIn }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const navigate = useNavigate('/');
   const modalToggle = () => {
     setIsModalOpen(isModalOpen === false ? true : false);
   };
   return (
     <header className="header b">
-      <a href="https://nikih449.github.io/movie-explorer-frontend">
-        <div className="header__logo"></div>
-      </a>
+      <div onClick={() => navigate('/')} className="header__logo"></div>
       <nav className="header__navigation">
         <div className="header__container">
           {loggedIn && (

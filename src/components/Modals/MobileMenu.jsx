@@ -19,7 +19,7 @@ function MobileMenu({ onClose, children }) {
       <nav className="mobile-menu__navigation">
         <div className="mobile-menu__container">
           <Navigation menuStyle link="/" title="Главная" />
-          <Navigation menuStyle link="/mobies" title="Фильмы" />
+          <Navigation menuStyle link="/movies" title="Фильмы" />
           <Navigation
             menuStyle
             link="/saved-movies"
@@ -27,11 +27,7 @@ function MobileMenu({ onClose, children }) {
           />
         </div>
         <div className="mobile-menu__container">
-          <Navigation
-            menuStyle
-            link="/profile"
-            title="Аккаунт"
-          />
+          <Navigation menuStyle link="/profile" title="Аккаунт" />
         </div>
       </nav>
       <button onClick={onClose} className="mobile-menu__close-button"></button>

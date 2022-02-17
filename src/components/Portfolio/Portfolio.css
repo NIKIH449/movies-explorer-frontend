@@ -2,7 +2,6 @@
   padding: 0 70px 125px 70px;
 }
 .portfolio__title {
-  font-family: Inter;
   font-size: 18px;
   line-height: 20px;
   color: #a0a0a0;
@@ -11,7 +10,6 @@
   margin: 0;
 }
 .portfolio__list {
-  font-family: Inter;
   font-size: 30px;
   line-height: 50px;
   letter-spacing: -0.04em;
@@ -41,6 +39,10 @@
   background-size: contain;
   background-position: center;
   cursor: pointer;
+  transition: 0.4s;
+}
+.portfolio__arrow:hover {
+  width: 23px;
 }
 
 @media screen and (max-width: 1023px) {

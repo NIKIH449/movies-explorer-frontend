@@ -13,8 +13,13 @@
   background-color: transparent;
   background-position: center;
   border: none;
+  cursor: pointer;
+  transition: 0.4s;
 }
 
+.mobile-menu__close-button:hover {
+  transform: rotate(90deg);
+}
 @media screen and (min-width: 1024px) {
   .mobile-menu {
     display: none;

@@ -3,7 +3,6 @@
 }
 
 .footer__title {
-  font-family: Inter;
   font-size: 13px;
   line-height: 16px;
   text-align: center;
@@ -15,7 +14,6 @@
 }
 
 .footer__navigation {
-  font-family: Inter;
   font-size: 13px;
   line-height: 16px;
   text-align: right;
@@ -23,6 +21,8 @@
 }
 .footer__date {
   margin: 0;
+  font-size: 13px;
+  line-height: 16px;
 }
 
 .footer__container {
@@ -74,7 +74,6 @@
   .footer__date-mobile {
     display: block;
     margin: 0;
-    font-family: Inter;
     font-size: 12px;
     line-height: 15px;
     color: #a0a0a0;

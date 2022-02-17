@@ -1,0 +1,31 @@
+.register__logo {
+  background-image: url('../../images/logo.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 38px;
+  height: 38px;
+}
+.register__input-name {
+  margin: 0;
+  font-size: 10px;
+  line-height: 12px;
+  color: #a0a0a0;
+  padding-bottom: 5px;
+  outline: none;
+}
+.register__title {
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 29px;
+}
+.register __input {
+  width: 396px;
+  height: 17px;
+  margin-bottom: 24px;
+  border: none;
+  outline: none;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 17px;
+  border-bottom: 1px solid #e8e8e8;
+}

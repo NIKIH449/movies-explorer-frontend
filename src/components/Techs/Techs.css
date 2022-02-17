@@ -4,7 +4,6 @@
 }
 
 .techs__title {
-  font-family: Inter;
   font-size: 22px;
   line-height: 27px;
   letter-spacing: -0.04em;
@@ -23,7 +22,6 @@
 .techs__tabs {
   display: flex;
   justify-content: center;
-  font-family: Inter;
   font-size: 14px;
   line-height: 17px;
   text-align: center;
@@ -31,7 +29,6 @@
 }
 
 .techs__paragraph-heading {
-  font-family: Inter;
   font-size: 50px;
   line-height: 58px;
   text-align: center;
@@ -41,7 +38,6 @@
 
 .techs__paragraph {
   max-width: 460px;
-  font-family: Inter;
   font-size: 14px;
   line-height: 20px;
   text-align: center;

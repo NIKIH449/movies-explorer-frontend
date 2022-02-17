@@ -4,8 +4,9 @@
   flex-direction: column;
 }
 .moviesCard__container {
+  padding-left: 14px;
   display: flex;
-
+  height: 68px;
   justify-content: space-between;
   align-items: center;
 }
@@ -15,14 +16,12 @@
 }
 .moviesCard__title {
   margin: 0 0 9px 0;
-  font-family: Inter;
   font-weight: 500;
   font-size: 15px;
   line-height: 18px;
 }
 .moviesCard__duration {
   margin: 0 0 14px 0;
-  font-family: Inter;
   font-size: 11px;
   line-height: 13px;
   display: flex;
@@ -41,7 +40,17 @@
   border: none;
   cursor: pointer;
 }
-
+.moviesCard__delete-button {
+  background-color: #f9f9f9;
+  border-radius: 36px;
+  width: 30px;
+  height: 30px;
+  background-image: url('../../images/delete.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+  border: none;
+  cursor: pointer;
+}
 .moviesCard__favorite-button_acitve {
   background-color: #2be080;
 }

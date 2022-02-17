@@ -8,12 +8,15 @@
   display: flex;
   align-items: center;
   justify-content: space-around;
+  transition: 0.4s;
 }
 
 .navTab:last-child {
   margin-right: 0;
 }
-
+.navTab:hover {
+  font-size: 16px;
+}
 @media screen and (max-width: 767px) {
   .navTab {
     width: 82px;
