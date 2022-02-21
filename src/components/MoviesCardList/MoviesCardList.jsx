@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router';
 import MoviesCard from '../MoviesCard/MoviesCard';
 import Preloader from '../Preloader/Preloader';
 import './MoviesCardList.css';
@@ -6,7 +7,7 @@ import './MoviesCardList.css';
 function MoviesCardList() {
   const [moviesList, setMoviesList] = useState([]);
   const [moviesCount, setMoviesCount] = useState(12);
-
+  const { pathname } = useLocation()
   useEffect(() => {
     //это временное решение, сделаю все красиво на следующем этапе
     if (moviesList.length === 0) {
@@ -35,7 +36,7 @@ function MoviesCardList() {
           })}
         </div>
       )}
-      {moviesCount < 100 && (
+      {moviesCount < 100 && pathname === '/movies' && (
         <button
           onClick={() => setMoviesCount(moviesCount + 3)}
           className="movieCardList_button-add"

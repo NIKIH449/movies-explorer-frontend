@@ -11,6 +11,8 @@
 }
 
 .promo__title {
+  font-style: normal;
+  font-weight: normal;
   margin: 160px 0 0 0;
   max-width: 730px;
   font-size: 50px;
