@@ -1,0 +1,50 @@
+.navTab {
+  background-color: #e8e8e8;
+  border-radius: 10px;
+  width: 96px;
+  height: 36px;
+  cursor: pointer;
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  transition: 0.4s;
+}
+
+.navTab:last-child {
+  margin-right: 0;
+}
+.navTab:hover {
+  font-size: 16px;
+}
+@media screen and (max-width: 767px) {
+  .navTab {
+    width: 82px;
+    height: 26px;
+    margin-right: 6px;
+  }
+}
+
+.navTab__techs {
+  width: 90px;
+  height: 60px;
+}
+
+@media screen and (max-width: 1023px) {
+  .navTab__techs {
+    width: 84px;
+    height: 57px;
+  }
+
+  .navTab__techs {
+    width: 84px;
+    height: 57px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .navTab__techs {
+    margin-right: 10px;
+    margin-bottom: 10px;
+  }
+}
