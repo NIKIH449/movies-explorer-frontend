@@ -1,21 +1,48 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { signIn } from '../../utils/MainApi';
 import Auth from '../Auth/Auth';
 import Navigation from '../Navigation/Navigation';
 import './Login.css';
-function Login() {
+function Login({ onLogin }) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  function handleChangeEmail(e) {
+    setEmail(e.target.value);
+  }
+  function handleChangePassword(e) {
+    setPassword(e.target.value);
+  }
+  function loginSubmit(e) {
+    e.preventDefault();
+    onLogin(password, email);
+  }
   return (
     <Auth
-      buttonName={'Зарегистрироваться'}
-      paragraph={'Уже зарегистрированы?'}
-      navigation={'Войти'}
-      title={'Добро пожаловать!'}
+      buttonName={'Войти'}
+      paragraph={'Ещё не зарегистрированы?'}
+      navigation={'Регистрация'}
+      title={'Рады видеть!'}
+      onSubmit={loginSubmit}
     >
-      <p className="login__input-name">Имя</p>
-      <input placeholder="Имя" type="text" className="login__input" />
       <p className="login__input-name">E-mail</p>
-      <input placeholder="E-mail" type="email" className="login__input" />
+      <input
+        onChange={handleChangeEmail}
+        value={email}
+        name="email"
+        placeholder="E-mail"
+        type="email"
+        className="login__input"
+      />
       <p className="login__input-name">Пароль</p>
-      <input placeholder="Пароль" type="password" className="login__input" />
+      <input
+        onChange={handleChangePassword}
+        value={password}
+        name="password"
+        placeholder="Пароль"
+        type="password"
+        className="login__input"
+      />
     </Auth>
   );
 }

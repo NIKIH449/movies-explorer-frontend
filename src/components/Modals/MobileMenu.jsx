@@ -2,8 +2,9 @@ import React, { useEffect } from 'react';
 import './MobileMenu.css';
 import { createPortal } from 'react-dom';
 import Navigation from '../Navigation/Navigation';
+import { useNavigate } from 'react-router';
 
-function MobileMenu({ onClose, children }) {
+function MobileMenu({ onClose }) {
   useEffect(() => {
     function onEscClose(e) {
       if (e.key === 'Escape') {
@@ -13,6 +14,7 @@ function MobileMenu({ onClose, children }) {
     window.addEventListener('keydown', onEscClose);
     return () => window.removeEventListener('keydown', onEscClose);
   }, [onClose]);
+
 
   return createPortal(
     <div className="mobile-menu">
@@ -29,7 +31,7 @@ function MobileMenu({ onClose, children }) {
         <div className="mobile-menu__container">
           <Navigation menuStyle link="/profile" title="Аккаунт" />
         </div>
-      </nav>
+      </nav>s
       <button onClick={onClose} className="mobile-menu__close-button"></button>
     </div>,
     document.getElementById('modal')

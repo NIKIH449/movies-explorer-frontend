@@ -1,46 +1,109 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import MoviesCard from '../MoviesCard/MoviesCard';
 import Preloader from '../Preloader/Preloader';
 import './MoviesCardList.css';
 
-function MoviesCardList() {
-  const [moviesList, setMoviesList] = useState([]);
+function MoviesCardList({
+  isMoviesListFailed,
+  isMovieFound,
+  filteredList,
+  moviesList,
+  favoriteList,
+  onDelete,
+  isLoading,
+  onLike,
+  filterMoviesByName,
+}) {
+  const [size, setSize] = useState(window.innerWidth);
+  const isLaptop = size > 1279;
+  const isTablet = size > 767 && size < 1279;
+  const { pathname } = useLocation();
   const [moviesCount, setMoviesCount] = useState(12);
-  const { pathname } = useLocation()
   useEffect(() => {
-    //это временное решение, сделаю все красиво на следующем этапе
-    if (moviesList.length === 0) {
-      return fetch('https://api.nomoreparties.co/beatfilm-movies', {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-        .then((data) => data.json())
-        .then((data) => setMoviesList(data));
-    }
-  }, []);
+    setMoviesCount(isLaptop ? 12 : isTablet ? 8 : 5);
+  }, [size]);
+  function updateSize() {
+    setTimeout(() => {
+      setSize(window.innerWidth);
+    }, 500);
+  }
+  window.addEventListener('resize', updateSize);
+  function showMoreMovies() {
+    isLaptop
+      ? setMoviesCount(moviesCount + 3)
+      : isTablet
+      ? setMoviesCount(moviesCount + 2)
+      : setMoviesCount(moviesCount + 1);
+  }
 
   return (
     <div className="moviesCardList">
-      {moviesList.length === 0 ? (
+      {isLoading && !isMoviesListFailed ? (
         <Preloader />
-      ) : (
+      ) : isMoviesListFailed ? (
+        <p>
+          Во время запроса произошла ошибка. Возможно, проблема с соединением
+          или сервер недоступен. Подождите немного и попробуйте ещё раз
+        </p>
+      ) : isMovieFound ? (
         <div className="moviesCardList__grid">
-          {moviesList.map((item, index) => {
-            if (index + 1 <= moviesCount) {
-              return <MoviesCard movie={item} key={index} />;
-            } else {
-              return '';
-            }
-          })}
+          {filteredList.length !== 0
+            ? filteredList.map((item, index) => {
+                if (index + 1 <= moviesCount) {
+                  return (
+                    <MoviesCard
+                      favoriteList={favoriteList}
+                      onDelete={onDelete}
+                      movie={item}
+                      key={index}
+                    />
+                  );
+                } else {
+                  return '';
+                }
+              })
+            : pathname === '/movies'
+            ? moviesList.map((item, index) => {
+                if (index + 1 <= moviesCount) {
+                  return (
+                    <MoviesCard
+                      onDelete={onDelete}
+                      favoriteList={favoriteList}
+                      onLike={onLike}
+                      movie={item}
+                      key={index}
+                    />
+                  );
+                } else {
+                  return '';
+                }
+              })
+            : favoriteList.map((item, index) => {
+                if (index + 1 <= moviesCount) {
+                  return (
+                    <MoviesCard
+                      favoriteList={favoriteList}
+                      onDelete={onDelete}
+                      movie={item}
+                      key={index}
+                    />
+                  );
+                } else {
+                  return '';
+                }
+              })}
         </div>
+      ) : (
+        <p>Ничего не найдено</p>
       )}
-      {moviesCount < 100 && pathname === '/movies' && (
-        <button
-          onClick={() => setMoviesCount(moviesCount + 3)}
-          className="movieCardList_button-add"
-        >
+      {pathname === '/saved-movies' && moviesCount < favoriteList.length && (
+        <button onClick={showMoreMovies} className="movieCardList_button-add">
+          Ещё
+        </button>
+      )}
+      {pathname === '/movies' && moviesCount < moviesList.length && (
+        <button onClick={showMoreMovies} className="movieCardList_button-add">
           Ещё
         </button>
       )}

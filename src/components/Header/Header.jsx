@@ -3,10 +3,11 @@ import MobileMenu from '../Modals/MobileMenu';
 import './Header.css';
 import Navigation from '../Navigation/Navigation';
 import { useNavigate } from 'react-router';
-function Header({ loggedIn }) {
+function Header({ isLoading, loggedIn }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate('/');
   const modalToggle = () => {
+    console.log('1');
     setIsModalOpen(isModalOpen === false ? true : false);
   };
   return (
@@ -22,20 +23,22 @@ function Header({ loggedIn }) {
           )}
         </div>
 
-        <div className="header__container">
-          {!loggedIn ? (
-            <>
-              <Navigation link="/signup" title="Регистрация" />
-              <div className="header__login-button">
-                <Navigation link="/signin" title="Войти" />
+        {!isLoading && (
+          <div className="header__container">
+            {!loggedIn ? (
+              <>
+                <Navigation link="/signup" title="Регистрация" />
+                <div className="header__login-button">
+                  <Navigation link="/signin" title="Войти" />
+                </div>
+              </>
+            ) : (
+              <div className="header__profile-button">
+                <Navigation link="/profile" title="Аккаунт" />
               </div>
-            </>
-          ) : (
-            <div className="header__profile-button">
-              <Navigation link="/profile" title="Аккаунт" />
-            </div>
-          )}
-        </div>
+            )}
+          </div>
+        )}
       </nav>
       <div className="header__mobile-menu">
         {!loggedIn ? (
