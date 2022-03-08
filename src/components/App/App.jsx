@@ -9,7 +9,6 @@ import {
   deleteMovie,
   putLike,
   onEditProfile,
-  onLogout,
   onSignOut,
 } from '../../utils/MainApi';
 import { getMovies } from '../../utils/MoviesApi';
@@ -200,8 +199,11 @@ function App() {
         setIsMovieFound(true);
       }
       setFilteredList(filterMovies);
+      localStorage.setItem('filteredList', filterMovies);
+      localStorage.setItem('shortFilmsStatus', shortFilmsOnly);
     }
   };
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">

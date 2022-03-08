@@ -55,6 +55,7 @@ const SearchForm = ({
       </div>
       <div className="searchForm__mobile">
         <FilterCheckbox
+          filterShortFilms={filterShortFilms}
           moviesList={moviesList}
           showShortFilms={showShortFilms}
         />

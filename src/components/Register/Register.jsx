@@ -28,32 +28,32 @@ function Register({ onRegister }) {
       title={'Добро пожаловать!'}
       onSubmit={registerSubmit}
     >
-      <p className="login__input-name">Имя</p>
+      <p className="register__input-name">Имя</p>
       <input
         value={name}
         onChange={handleChangeName}
         name="name"
         placeholder="Имя"
         type="text"
-        className="login__input"
+        className="register__input"
       />
-      <p className="login__input-name">E-mail</p>
+      <p className="register__input-name">E-mail</p>
       <input
         value={email}
         onChange={handleChangeEmail}
         name="email"
         placeholder="E-mail"
         type="email"
-        className="login__input"
+        className="register__input"
       />
-      <p className="login__input-name">Пароль</p>
+      <p className="register__input-name">Пароль</p>
       <input
         value={password}
         onChange={handleChangePassword}
         name="password"
         placeholder="Пароль"
         type="password"
-        className="login__input"
+        className="register__input"
       />
     </Auth>
   );
