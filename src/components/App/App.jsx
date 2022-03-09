@@ -29,11 +29,12 @@ function App() {
   const [currentUser, setCurrentUser] = useState({});
   const [loggedIn, setLoggedIn] = useState(false);
   const [moviesList, setMoviesList] = useState([]);
-  const [filteredList, setFilteredList] = useState([]);
   const [isInputEmpty, setIsInputEmpty] = useState(false);
   const [favoriteList, setFavoriteList] = useState([]);
   const [isMovieFound, setIsMovieFound] = useState(true);
-  const [shortFilmsOnly, setShortFilmsOnly] = useState(false);
+  const [shortAllFilmsOnly, setShortAllFilmsOnly] = useState(false);
+  const [shortFavoriteFilmsOnly, setShortFavoriteFilmsOnly] = useState(false);
+  const [isChangeInfoSuccess, setIsChangeInfoSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const { pathname } = useLocation();
   const navigate = useNavigate();
@@ -47,8 +48,12 @@ function App() {
     pathname !== '/profile' && pathname !== '/signin' && pathname !== '/signup';
 
   function onLogOut() {
-    onSignOut().catch((err) => console.log(err));
+    onSignOut().catch((err) => err);
     localStorage.removeItem('token');
+    localStorage.removeItem('initialMovies');
+    localStorage.removeItem('initialFavoriteMovies');
+    localStorage.removeItem('allMovies');
+    localStorage.removeItem('savedMovies');
     setLoggedIn(false);
     navigate('/');
   }
@@ -59,8 +64,9 @@ function App() {
       checkToken(token)
         .then((data) => {
           if (data) {
+            setCurrentUser(data.user);
             setLoggedIn(true);
-            setData();
+            setIsLoading(false);
           }
         })
         .catch((err) => console.log(err));
@@ -69,24 +75,8 @@ function App() {
     }
   }, []);
 
-  function onFilterMoviees(filter) {
-    if (filter === '') {
-      setIsInputEmpty(true);
-      setIsMovieFound(true);
-    } else {
-      setIsInputEmpty(false);
-      const result = moviesList.filter((movie) => movie.nameRU === filter);
-      if (result.length === 0) {
-        setIsMovieFound(false);
-        setFilteredList([]);
-      } else {
-        setIsMovieFound(true);
-        setFilteredList(result);
-      }
-    }
-  }
-
   function setData() {
+    setIsLoading(true);
     const profileInfo = getUserInfo();
     const initialMovies = getMovies();
     const favoriteMovies = getUserMovies();
@@ -95,12 +85,37 @@ function App() {
         setCurrentUser(data[0].user);
         setMoviesList(data[1]);
         setFavoriteList(data[2].data);
+        localStorage.setItem('initialMovies', JSON.stringify(data[1]));
+        localStorage.setItem(
+          'initialFavoriteMovies',
+          JSON.stringify(data[2].data)
+        );
+        localStorage.setItem('allMovies', JSON.stringify(data[1]));
+        localStorage.setItem('savedMovies', JSON.stringify(data[2].data));
         setIsLoading(false);
       })
       .catch((err) => {
         console.log(err);
       });
   }
+
+  useEffect(() => {
+    setIsLoading(true);
+    const allMoviesArr = JSON.parse(localStorage.getItem('allMovies'));
+    if (allMoviesArr) {
+      setMoviesList(allMoviesArr);
+    } else {
+      setData();
+    }
+    const saved = JSON.parse(localStorage.getItem('savedMovies'));
+    if (saved) {
+      setFavoriteList(saved);
+    } else {
+      setData();
+    }
+    setIsLoading(false);
+  }, []);
+
   function signinHandler(email, password) {
     signIn(email, password)
       .then((data) => {
@@ -108,23 +123,10 @@ function App() {
           localStorage.setItem('token', data.token);
           setLoggedIn(true);
           setData();
-          navigate('/');
+          navigate('/movies');
         }
       })
       .catch((err) => console.log(err));
-  }
-
-  function getCurrentUser() {
-    const token = localStorage.getItem('token');
-    getUserInfo(token)
-      .then((data) => {
-        if (data) {
-          setCurrentUser(data.user);
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-      });
   }
 
   const changeProfileInfo = (email, name) => {
@@ -132,6 +134,10 @@ function App() {
     onEditProfile(name, email, token)
       .then((data) => {
         setCurrentUser(data.data);
+        setIsChangeInfoSuccess(true);
+        setTimeout(() => {
+          setIsChangeInfoSuccess(false);
+        }, 1500);
       })
       .catch((err) => {
         console.log(err);
@@ -146,11 +152,10 @@ function App() {
       })
       .catch((err) => console.log(err));
   }
-
   const addToFavorite = (movie) => {
+    console.log(movie);
     putLike(movie)
       .then((data) => {
-        console.log(data);
         setFavoriteList([...favoriteList, data.data]);
       })
       .catch((err) => {
@@ -174,33 +179,55 @@ function App() {
       });
   };
 
-  const showShortFilms = (movies) =>
-    movies.filter((item) => item.duration < 40);
-
-  const filterShortFilms = () =>
-    setShortFilmsOnly(shortFilmsOnly === false ? true : false);
+  const showShortFilms = () => {
+    const allMovies = JSON.parse(localStorage.getItem('allMovies'));
+    const savedMovies = JSON.parse(localStorage.getItem('savedMovies'));
+    if (pathname === '/movies' && shortAllFilmsOnly === false) {
+      setShortAllFilmsOnly(true);
+      setMoviesList(allMovies.filter((item) => item.duration < 40));
+    } else if (pathname === '/movies' && shortAllFilmsOnly === true) {
+      setShortAllFilmsOnly(false);
+      setMoviesList(allMovies);
+    }
+    if (pathname === '/saved-movies' && shortFavoriteFilmsOnly === false) {
+      setShortFavoriteFilmsOnly(true);
+      setFavoriteList(savedMovies.filter((item) => item.duration < 40));
+    } else if (
+      pathname === '/saved-movies' &&
+      shortFavoriteFilmsOnly === true
+    ) {
+      setShortFavoriteFilmsOnly(false);
+      setFavoriteList(savedMovies);
+    }
+  };
 
   const filterMoviesByName = (movies, query, mount) => {
-    console.log('mount');
-    if (query === '' && mount) {
-      setFilteredList([]);
+    const initialFavoriteMovies = JSON.parse(
+      localStorage.getItem('initialFavoriteMovies')
+    );
+    const initialMovies = JSON.parse(localStorage.getItem('initialMovies'));
+    if (!query && pathname === '/movies') {
+      setIsMovieFound(true);
+      setMoviesList(initialMovies);
+    } else if (!query && pathname === '/saved-movies') {
+      setIsMovieFound(true);
+      setFavoriteList(initialFavoriteMovies);
     } else if (query === '' && !mount) {
-      setFilteredList([]);
+      console.log(2);
       setIsInputEmpty(true);
     } else {
       setIsInputEmpty(false);
       const regex = new RegExp(query, 'gi');
-      const filterMovies = movies.filter(
+      const filterMovies = initialMovies.filter(
         (item) => regex.test(item.nameRU) || regex.test(item.nameEN)
       );
-      if (filterMovies.length === 0) {
-        setIsMovieFound(false);
+      if (pathname === '/movies') {
+        setMoviesList(filterMovies);
+        localStorage.setItem('allMovies', JSON.stringify(filterMovies));
       } else {
-        setIsMovieFound(true);
+        setFavoriteList(filterMovies);
+        localStorage.setItem('savedMovies', JSON.stringify(filterMovies));
       }
-      setFilteredList(filterMovies);
-      localStorage.setItem('filteredList', filterMovies);
-      localStorage.setItem('shortFilmsStatus', shortFilmsOnly);
     }
   };
 
@@ -220,21 +247,12 @@ function App() {
                   <Movies
                     filterMoviesByName={filterMoviesByName}
                     isLoading={isLoading}
-                    filterShortFilms={filterShortFilms}
                     showShortFilms={showShortFilms}
                     onDelete={deleteFromFavorite}
                     onLike={addToFavorite}
                     isMovieFound={isMovieFound}
                     isInputEmpty={isInputEmpty}
-                    filterMovies={onFilterMoviees}
-                    filteredList={filteredList}
-                    moviesList={
-                      !shortFilmsOnly
-                        ? moviesList
-                        : filteredList.length > 0
-                        ? showShortFilms(filteredList)
-                        : showShortFilms(moviesList)
-                    }
+                    moviesList={moviesList}
                     favoriteList={favoriteList}
                   />
                 </ProtectedRoute>
@@ -247,20 +265,11 @@ function App() {
                   <SavedMovies
                     filterMoviesByName={filterMoviesByName}
                     isLoading={isLoading}
-                    filterShortFilms={filterShortFilms}
                     onDelete={deleteFromFavorite}
                     showShortFilms={showShortFilms}
                     isMovieFound={isMovieFound}
                     isInputEmpty={isInputEmpty}
-                    filterMovies={onFilterMoviees}
-                    filteredList={filteredList}
-                    favoriteList={
-                      !shortFilmsOnly
-                        ? favoriteList
-                        : filteredList.length > 0
-                        ? showShortFilms(filteredList)
-                        : showShortFilms(favoriteList)
-                    }
+                    favoriteList={favoriteList}
                     moviesList={moviesList}
                   />
                 </ProtectedRoute>
@@ -271,6 +280,7 @@ function App() {
               element={
                 <ProtectedRoute loggedIn={loggedIn}>
                   <Profile
+                    isChangeInfoSuccess={isChangeInfoSuccess}
                     changeProfileInfo={changeProfileInfo}
                     logOut={onLogOut}
                   />
@@ -278,10 +288,15 @@ function App() {
               }
             />
             <Route path="*" element={<NotFound />} />
-            <Route path="/signin" element={<Login onLogin={signinHandler} />} />
+            <Route
+              path="/signin"
+              element={<Login loggedIn={loggedIn} onLogin={signinHandler} />}
+            />
             <Route
               path="/signup"
-              element={<Register onRegister={signupHandler} />}
+              element={
+                <Register loggedIn={loggedIn} onRegister={signupHandler} />
+              }
             />
           </Routes>
         )}

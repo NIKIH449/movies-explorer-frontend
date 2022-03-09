@@ -16,13 +16,13 @@ function Movies({
   onLike,
   filterMoviesByName,
   onDelete,
+  currentCheckboxPosition,
 }) {
-  useEffect(() => {
-    filterMoviesByName([], '', 'mount');
-  }, []);
+
   return (
     <div className="movies">
       <SearchForm
+        currentCheckboxPosition={currentCheckboxPosition}
         filterMoviesByName={filterMoviesByName}
         filterShortFilms={filterShortFilms}
         showShortFilms={showShortFilms}

@@ -13,13 +13,13 @@ function MoviesCardList({
   onDelete,
   isLoading,
   onLike,
-  filterMoviesByName,
 }) {
   const [size, setSize] = useState(window.innerWidth);
   const isLaptop = size > 1279;
   const isTablet = size > 767 && size < 1279;
   const { pathname } = useLocation();
   const [moviesCount, setMoviesCount] = useState(12);
+
   useEffect(() => {
     setMoviesCount(isLaptop ? 12 : isTablet ? 8 : 5);
   }, [size]);
@@ -46,24 +46,9 @@ function MoviesCardList({
           Во время запроса произошла ошибка. Возможно, проблема с соединением
           или сервер недоступен. Подождите немного и попробуйте ещё раз
         </p>
-      ) : isMovieFound ? (
+      ) : (
         <div className="moviesCardList__grid">
-          {filteredList.length !== 0
-            ? filteredList.map((item, index) => {
-                if (index + 1 <= moviesCount) {
-                  return (
-                    <MoviesCard
-                      favoriteList={favoriteList}
-                      onDelete={onDelete}
-                      movie={item}
-                      key={index}
-                    />
-                  );
-                } else {
-                  return '';
-                }
-              })
-            : pathname === '/movies'
+          {pathname === '/movies'
             ? moviesList.map((item, index) => {
                 if (index + 1 <= moviesCount) {
                   return (
@@ -94,8 +79,13 @@ function MoviesCardList({
                 }
               })}
         </div>
-      ) : (
+      )}
+      {pathname === '/movies' && moviesList.length === 0 ? (
         <p>Ничего не найдено</p>
+      ) : pathname === '/saved-movies' && favoriteList.length === 0 ? (
+        <p>Ничего не найдено</p>
+      ) : (
+        ''
       )}
       {pathname === '/saved-movies' && moviesCount < favoriteList.length && (
         <button onClick={showMoreMovies} className="movieCardList_button-add">

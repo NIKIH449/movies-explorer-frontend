@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import SearchForm from '../SearchForm/SearchForm';
 import './SavedMovies.css';
@@ -15,10 +15,6 @@ function SavedMovies({
   filterShortFilms,
   filterMoviesByName,
 }) {
-  useEffect(() => {
-    filterMoviesByName([], '', 'mount');
-  }, []);
-
   return (
     <div className="savedMovies">
       <SearchForm

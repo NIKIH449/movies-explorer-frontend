@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import './Profile.css';
 import { CurrentUserContext } from '../../context/CurrentUserContext';
-function Profile({ logOut, changeProfileInfo }) {
+function Profile({ logOut, isChangeInfoSuccess, changeProfileInfo }) {
   const currentUser = useContext(CurrentUserContext);
   const [email, setEmail] = useState(currentUser.email);
   const [name, setName] = useState(currentUser.name);
@@ -56,8 +56,9 @@ function Profile({ logOut, changeProfileInfo }) {
           onClick={changeInfo}
           type="submit"
           className="profile__button profile__button_type_edit"
+          style={{ color: isChangeInfoSuccess ? 'green' : '' }}
         >
-          Редактировать
+          {isChangeInfoSuccess ? 'Успешно!' : 'Редактировать'}
         </button>
         <button
           type="submit"

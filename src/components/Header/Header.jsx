@@ -7,7 +7,7 @@ function Header({ isLoading, loggedIn }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate('/');
   const modalToggle = () => {
-    console.log('1');
+    ('1');
     setIsModalOpen(isModalOpen === false ? true : false);
   };
   return (
