@@ -26,16 +26,32 @@ import { CurrentUserContext } from '../../context/CurrentUserContext';
 import Preloader from '../Preloader/Preloader';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 function App() {
+  const initialMovies = JSON.parse(localStorage.getItem('initialMovies'));
+  const savedMovies = JSON.parse(localStorage.getItem('savedMovies'));
+  const allMovies = JSON.parse(localStorage.getItem('allMovies'));
+  const initialFavoriteMovies = JSON.parse(
+    localStorage.getItem('initialFavoriteMovies')
+  );
+  const searchAllMovies = localStorage.getItem('searchAllMovies');
+  const checkBoxMovieStatus = JSON.parse(
+    localStorage.getItem('checkBoxMovieStatus')
+  );
+
+  const [movieList, setMovieList] = useState([]);
+  const [favoriteList, setFavoriteList] = useState([]);
   const [currentUser, setCurrentUser] = useState({});
   const [loggedIn, setLoggedIn] = useState(false);
-  const [moviesList, setMoviesList] = useState([]);
+  const [isMoviesLoading, setIsMoviesLoading] = useState(
+    allMovies ? false : true
+  );
+  const [isFavMoviesLoading, setIsFavMoviesLoading] = useState(false);
+  const [isTokenLoading, setIsTokenLoading] = useState(true);
   const [isInputEmpty, setIsInputEmpty] = useState(false);
-  const [favoriteList, setFavoriteList] = useState([]);
   const [isMovieFound, setIsMovieFound] = useState(true);
   const [shortAllFilmsOnly, setShortAllFilmsOnly] = useState(false);
   const [shortFavoriteFilmsOnly, setShortFavoriteFilmsOnly] = useState(false);
   const [isChangeInfoSuccess, setIsChangeInfoSuccess] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const isLoading = isMoviesLoading && isFavMoviesLoading && isTokenLoading;
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const isHeaderNeed =
@@ -43,7 +59,6 @@ function App() {
     pathname === '/' ||
     pathname === '/saved-movies' ||
     pathname === '/profile';
-
   const isFooterNeed =
     pathname !== '/profile' && pathname !== '/signin' && pathname !== '/signup';
 
@@ -51,14 +66,20 @@ function App() {
     onSignOut().catch((err) => err);
     localStorage.removeItem('token');
     localStorage.removeItem('initialMovies');
-    localStorage.removeItem('initialFavoriteMovies');
     localStorage.removeItem('allMovies');
     localStorage.removeItem('savedMovies');
+    localStorage.removeItem('initialFavoriteMovies');
+    localStorage.removeItem('checkBoxMovieStatus');
+    localStorage.removeItem('searchAllMovies');
+    localStorage.removeItem('checkBoxFavMovieStatus');
+    setFavoriteList([]);
+    setMovieList([]);
+    setCurrentUser([]);
     setLoggedIn(false);
     navigate('/');
   }
-
   useEffect(() => {
+    setIsTokenLoading(true);
     const token = localStorage.getItem('token');
     if (token) {
       checkToken(token)
@@ -66,24 +87,57 @@ function App() {
           if (data) {
             setCurrentUser(data.user);
             setLoggedIn(true);
-            setIsLoading(false);
+            setIsTokenLoading(() => {
+              setTimeout(setIsTokenLoading(false));
+            }, 1000);
           }
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          setIsTokenLoading(false);
+          console.log(err);
+        });
     } else {
-      setIsLoading(false);
+      setIsTokenLoading(false);
     }
   }, []);
 
+  useEffect(() => {
+    const allMovies = JSON.parse(localStorage.getItem('allMovies'));
+    if (!allMovies) {
+      setIsMoviesLoading(true);
+      getMovies()
+        .then((data) => {
+          localStorage.setItem('allMovies', JSON.stringify(data));
+          localStorage.setItem('initialMovies', JSON.stringify(data));
+          setIsMoviesLoading(false);
+          setMovieList(data);
+        })
+        .catch((err) => console.log(err));
+    } else {
+      setMovieList(allMovies);
+    }
+    const savedMovies = JSON.parse(localStorage.getItem('savedMovies'));
+    if (!savedMovies && loggedIn) {
+      setIsFavMoviesLoading(true);
+      getUserMovies()
+        .then((data) => {
+          setFavoriteList(data.data);
+          localStorage.setItem('savedMovies', JSON.stringify(data.data));
+          localStorage.setItem('initialSavedMovies', JSON.stringify(data.data));
+        })
+        .catch((err) => console.log(err));
+    } else {
+      setFavoriteList(savedMovies);
+    }
+  }, []);
   function setData() {
-    setIsLoading(true);
     const profileInfo = getUserInfo();
     const initialMovies = getMovies();
     const favoriteMovies = getUserMovies();
     Promise.all([profileInfo, initialMovies, favoriteMovies])
       .then((data) => {
         setCurrentUser(data[0].user);
-        setMoviesList(data[1]);
+        setMovieList(data[1]);
         setFavoriteList(data[2].data);
         localStorage.setItem('initialMovies', JSON.stringify(data[1]));
         localStorage.setItem(
@@ -92,31 +146,14 @@ function App() {
         );
         localStorage.setItem('allMovies', JSON.stringify(data[1]));
         localStorage.setItem('savedMovies', JSON.stringify(data[2].data));
-        setIsLoading(false);
+        setIsTokenLoading(false);
       })
       .catch((err) => {
         console.log(err);
       });
   }
-
-  useEffect(() => {
-    setIsLoading(true);
-    const allMoviesArr = JSON.parse(localStorage.getItem('allMovies'));
-    if (allMoviesArr) {
-      setMoviesList(allMoviesArr);
-    } else {
-      setData();
-    }
-    const saved = JSON.parse(localStorage.getItem('savedMovies'));
-    if (saved) {
-      setFavoriteList(saved);
-    } else {
-      setData();
-    }
-    setIsLoading(false);
-  }, []);
-
   function signinHandler(email, password) {
+    setIsTokenLoading(true);
     signIn(email, password)
       .then((data) => {
         if (data) {
@@ -153,10 +190,17 @@ function App() {
       .catch((err) => console.log(err));
   }
   const addToFavorite = (movie) => {
-    console.log(movie);
     putLike(movie)
       .then((data) => {
         setFavoriteList([...favoriteList, data.data]);
+        localStorage.setItem(
+          'savedMovies',
+          JSON.stringify([...favoriteList, data.data])
+        );
+        localStorage.setItem(
+          'initialFavoriteMovies',
+          JSON.stringify([...favoriteList, data.data])
+        );
       })
       .catch((err) => {
         console.error(err);
@@ -172,6 +216,8 @@ function App() {
         if (data) {
           const arr = favoriteList.filter((item) => item.movieId !== id);
           setFavoriteList(arr);
+          localStorage.setItem('savedMovies', JSON.stringify(arr));
+          localStorage.setItem('initialFavoriteMovies', JSON.stringify(arr));
         }
       })
       .catch((err) => {
@@ -179,63 +225,58 @@ function App() {
       });
   };
 
-  const showShortFilms = () => {
-    const allMovies = JSON.parse(localStorage.getItem('allMovies'));
-    const savedMovies = JSON.parse(localStorage.getItem('savedMovies'));
-    if (pathname === '/movies' && shortAllFilmsOnly === false) {
-      setShortAllFilmsOnly(true);
-      setMoviesList(allMovies.filter((item) => item.duration < 40));
-    } else if (pathname === '/movies' && shortAllFilmsOnly === true) {
-      setShortAllFilmsOnly(false);
-      setMoviesList(allMovies);
+  const filterMoviesByName = (data, searchQuery, mount) => {
+    if (searchQuery && pathname === '/movies') {
+      const regex = new RegExp(searchQuery, 'gi');
+      const filterData = allMovies.filter(
+        (item) => regex.test(item.nameRU) || regex.test(item.nameEN)
+      );
+      setMovieList(filterData);
+    } else if (!searchQuery && pathname === '/movies') {
+      setMovieList(initialMovies);
+    } else if (searchQuery && pathname === '/saved-movies') {
+      const regex = new RegExp(searchQuery, 'gi');
+      const filterData = savedMovies.filter(
+        (item) => regex.test(item.nameRU) || regex.test(item.nameEN)
+      );
+      setFavoriteList(filterData);
+    } else if (!searchQuery && pathname === '/saved-movies') {
+      setFavoriteList(initialFavoriteMovies);
     }
-    if (pathname === '/saved-movies' && shortFavoriteFilmsOnly === false) {
-      setShortFavoriteFilmsOnly(true);
-      setFavoriteList(savedMovies.filter((item) => item.duration < 40));
+  };
+
+  const showShortFilms = () => {
+    if (pathname === '/movies' && shortAllFilmsOnly === false) {
+      localStorage.setItem('checkBoxMovieStatus', true);
+      setShortAllFilmsOnly(true);
+    } else if (pathname === '/movies' && shortAllFilmsOnly === true) {
+      localStorage.setItem('checkBoxMovieStatus', false);
+      setShortAllFilmsOnly(false);
     } else if (
       pathname === '/saved-movies' &&
       shortFavoriteFilmsOnly === true
     ) {
+      localStorage.setItem('checkBoxFavMovieStatus', false);
       setShortFavoriteFilmsOnly(false);
-      setFavoriteList(savedMovies);
+    } else if (
+      pathname === '/saved-movies' &&
+      shortFavoriteFilmsOnly === false
+    ) {
+      localStorage.setItem('checkBoxFavMovieStatus', true);
+      setShortFavoriteFilmsOnly(true);
     }
   };
 
-  const filterMoviesByName = (movies, query, mount) => {
-    const initialFavoriteMovies = JSON.parse(
-      localStorage.getItem('initialFavoriteMovies')
-    );
-    const initialMovies = JSON.parse(localStorage.getItem('initialMovies'));
-    if (!query && pathname === '/movies') {
-      setIsMovieFound(true);
-      setMoviesList(initialMovies);
-    } else if (!query && pathname === '/saved-movies') {
-      setIsMovieFound(true);
-      setFavoriteList(initialFavoriteMovies);
-    } else if (query === '' && !mount) {
-      console.log(2);
-      setIsInputEmpty(true);
-    } else {
-      setIsInputEmpty(false);
-      const regex = new RegExp(query, 'gi');
-      const filterMovies = initialMovies.filter(
-        (item) => regex.test(item.nameRU) || regex.test(item.nameEN)
-      );
-      if (pathname === '/movies') {
-        setMoviesList(filterMovies);
-        localStorage.setItem('allMovies', JSON.stringify(filterMovies));
-      } else {
-        setFavoriteList(filterMovies);
-        localStorage.setItem('savedMovies', JSON.stringify(filterMovies));
-      }
-    }
-  };
+  useEffect(() => {
+    pathname === '/movies' &&
+      filterMoviesByName(allMovies, searchAllMovies, checkBoxMovieStatus);
+  }, []);
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
         {isHeaderNeed && <Header isLoading={isLoading} loggedIn={loggedIn} />}
-        {isLoading ? (
+        {isMoviesLoading || isFavMoviesLoading || isTokenLoading ? (
           <Preloader></Preloader>
         ) : (
           <Routes>
@@ -245,6 +286,9 @@ function App() {
               element={
                 <ProtectedRoute loggedIn={loggedIn}>
                   <Movies
+                    checkBoxStatus={JSON.parse(
+                      localStorage.getItem('checkBoxMovieStatus')
+                    )}
                     filterMoviesByName={filterMoviesByName}
                     isLoading={isLoading}
                     showShortFilms={showShortFilms}
@@ -252,8 +296,8 @@ function App() {
                     onLike={addToFavorite}
                     isMovieFound={isMovieFound}
                     isInputEmpty={isInputEmpty}
-                    moviesList={moviesList}
                     favoriteList={favoriteList}
+                    movieList={movieList}
                   />
                 </ProtectedRoute>
               }
@@ -263,6 +307,7 @@ function App() {
               element={
                 <ProtectedRoute loggedIn={loggedIn}>
                   <SavedMovies
+                    checkBoxStatus={shortFavoriteFilmsOnly}
                     filterMoviesByName={filterMoviesByName}
                     isLoading={isLoading}
                     onDelete={deleteFromFavorite}
@@ -270,7 +315,6 @@ function App() {
                     isMovieFound={isMovieFound}
                     isInputEmpty={isInputEmpty}
                     favoriteList={favoriteList}
-                    moviesList={moviesList}
                   />
                 </ProtectedRoute>
               }

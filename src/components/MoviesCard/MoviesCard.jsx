@@ -2,12 +2,13 @@ import React from 'react';
 import { useLocation } from 'react-router';
 import './MoviesCard.css';
 
-function MoviesCard({ favoriteList, movie, onDelete, onLike }) {
+function MoviesCard({ movie, onDelete, onLike, favoriteList }) {
   const { pathname } = useLocation();
 
   function isFavorite() {
     return favoriteList.some((item) => item.movieId === movie.id);
   }
+  
   const movieImage =
     movie.image.url === undefined
       ? movie.image
@@ -15,6 +16,7 @@ function MoviesCard({ favoriteList, movie, onDelete, onLike }) {
 
   const trailer =
     movie.trailer === undefined ? movie.trailerLink : movie.trailer;
+
   const transformDuration = () => {
     return `${Math.floor(movie.duration / 60)}ч ${movie.duration % 60}м`;
   };

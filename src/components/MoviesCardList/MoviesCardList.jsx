@@ -6,13 +6,11 @@ import './MoviesCardList.css';
 
 function MoviesCardList({
   isMoviesListFailed,
-  isMovieFound,
-  filteredList,
-  moviesList,
   favoriteList,
   onDelete,
   isLoading,
   onLike,
+  movieList,
 }) {
   const [size, setSize] = useState(window.innerWidth);
   const isLaptop = size > 1279;
@@ -36,7 +34,6 @@ function MoviesCardList({
       ? setMoviesCount(moviesCount + 2)
       : setMoviesCount(moviesCount + 1);
   }
-
   return (
     <div className="moviesCardList">
       {isLoading && !isMoviesListFailed ? (
@@ -48,39 +45,42 @@ function MoviesCardList({
         </p>
       ) : (
         <div className="moviesCardList__grid">
-          {pathname === '/movies'
-            ? moviesList.map((item, index) => {
-                if (index + 1 <= moviesCount) {
-                  return (
-                    <MoviesCard
-                      onDelete={onDelete}
-                      favoriteList={favoriteList}
-                      onLike={onLike}
-                      movie={item}
-                      key={index}
-                    />
-                  );
-                } else {
-                  return '';
-                }
-              })
-            : favoriteList.map((item, index) => {
-                if (index + 1 <= moviesCount) {
-                  return (
-                    <MoviesCard
-                      favoriteList={favoriteList}
-                      onDelete={onDelete}
-                      movie={item}
-                      key={index}
-                    />
-                  );
-                } else {
-                  return '';
-                }
-              })}
+          {pathname === '/movies' &&
+            movieList &&
+            movieList.map((item, index) => {
+              if (index + 1 <= moviesCount) {
+                return (
+                  <MoviesCard
+                    onDelete={onDelete}
+                    favoriteList={favoriteList}
+                    onLike={onLike}
+                    movie={item}
+                    key={index}
+                  />
+                );
+              } else {
+                return '';
+              }
+            })}{' '}
+          {pathname === '/saved-movies' &&
+            favoriteList &&
+            favoriteList.map((item, index) => {
+              if (index + 1 <= moviesCount) {
+                return (
+                  <MoviesCard
+                    favoriteList={favoriteList}
+                    onDelete={onDelete}
+                    movie={item}
+                    key={index}
+                  />
+                );
+              } else {
+                return '';
+              }
+            })}
         </div>
       )}
-      {pathname === '/movies' && moviesList.length === 0 ? (
+      {pathname === '/movies' && movieList.length === 0 ? (
         <p>Ничего не найдено</p>
       ) : pathname === '/saved-movies' && favoriteList.length === 0 ? (
         <p>Ничего не найдено</p>
@@ -92,7 +92,7 @@ function MoviesCardList({
           Ещё
         </button>
       )}
-      {pathname === '/movies' && moviesCount < moviesList.length && (
+      {pathname === '/movies' && moviesCount < movieList.length && (
         <button onClick={showMoreMovies} className="movieCardList_button-add">
           Ещё
         </button>

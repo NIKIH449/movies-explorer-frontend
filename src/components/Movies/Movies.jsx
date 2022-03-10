@@ -3,6 +3,7 @@ import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import SearchForm from '../SearchForm/SearchForm';
 import './Movies.css';
 function Movies({
+  checkBoxStatus,
   showShortFilms,
   filterShortFilms,
   isMoviesListFailed,
@@ -11,26 +12,36 @@ function Movies({
   favoriteList,
   isInputEmpty,
   filterMovies,
-  moviesList,
+  movieList,
   isLoading,
   onLike,
   filterMoviesByName,
   onDelete,
   currentCheckboxPosition,
 }) {
-
+  function moviesMiddleware() {
+    if (checkBoxStatus === true) {
+      const filterList = movieList.filter((item) => item.duration < 40);
+      
+      return filterList;
+    } else {
+      return movieList;
+    }
+  }
   return (
     <div className="movies">
       <SearchForm
+        movieList={movieList}
+        checkBoxStatus={checkBoxStatus}
         currentCheckboxPosition={currentCheckboxPosition}
         filterMoviesByName={filterMoviesByName}
         filterShortFilms={filterShortFilms}
         showShortFilms={showShortFilms}
         isInputEmpty={isInputEmpty}
         filterMovies={filterMovies}
-        moviesList={moviesList}
       />
       <MoviesCardList
+        movieList={moviesMiddleware()}
         filterMoviesByName={filterMoviesByName}
         onDelete={onDelete}
         favoriteList={favoriteList}
@@ -39,7 +50,6 @@ function Movies({
         isMoviesListFailed={isMoviesListFailed}
         isMovieFound={isMovieFound}
         filteredList={filteredList}
-        moviesList={moviesList}
       />
     </div>
   );

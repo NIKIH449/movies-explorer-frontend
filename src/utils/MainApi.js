@@ -30,7 +30,7 @@ export const putLike = (data) => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      country: data.country,
+      country: data.country || 'undefined',
       director: data.director,
       duration: data.duration,
       year: data.year,

@@ -1,37 +1,34 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router';
-
 import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
 import './SearchForm.css';
 
 const SearchForm = ({
   showShortFilms,
-  moviesList,
   isInputEmpty,
   filterShortFilms,
   filterMoviesByName,
-  favoriteList,
   currentCheckboxPosition,
+  checkBoxStatus,
+  movieList,
+  favoriteList,
 }) => {
-  const [search, setSearch] = useState('');
-  const { pathname } = useLocation();
   const initialSearchValue = localStorage.getItem('searchAllMovies');
-  const initialFavoriteSearchValue = localStorage.getItem(
-    'searchFavoriteMovies'
+  const { pathname } = useLocation();
+  const [search, setSearch] = useState(
+    initialSearchValue && pathname === '/movies' ? initialSearchValue : ''
   );
   function handleChangeSearch(e) {
     setSearch(e.target.value);
     if (pathname === '/movies') {
       localStorage.setItem('searchAllMovies', e.target.value);
-    } else {
-      localStorage.setItem('searchFavoriteMovies', e.target.value);
     }
   }
 
   const submitForm = (e) => {
     e.preventDefault();
     if (pathname === '/movies') {
-      filterMoviesByName(moviesList, search);
+      filterMoviesByName(movieList, search);
     } else {
       filterMoviesByName(favoriteList, search);
     }
@@ -44,13 +41,7 @@ const SearchForm = ({
         <div className="searchForm__input">
           <input
             id="search"
-            value={
-              pathname === ''
-                ? search
-                : pathname === '/movies'
-                ? initialSearchValue
-                : initialFavoriteSearchValue || ''
-            }
+            value={search}
             onChange={handleChangeSearch}
             name="search"
             placeholder="Фильм"
@@ -60,9 +51,9 @@ const SearchForm = ({
         <button type="submit" className="searchForm__submit-button" />
         <div className="searchForm__checkbox-container">
           <FilterCheckbox
+            checkBoxStatus={checkBoxStatus}
             currentCheckboxPosition={currentCheckboxPosition}
             filterShortFilms={filterShortFilms}
-            moviesList={moviesList}
             showShortFilms={showShortFilms}
           />
           <p className="searchForm__paragraph">Короткометражки</p>
@@ -70,9 +61,9 @@ const SearchForm = ({
       </div>
       <div className="searchForm__mobile">
         <FilterCheckbox
+          checkBoxStatus={checkBoxStatus}
           currentCheckboxPosition={currentCheckboxPosition}
           filterShortFilms={filterShortFilms}
-          moviesList={moviesList}
           showShortFilms={showShortFilms}
         />
         <p className="searchForm__paragraph">Короткометражки</p>

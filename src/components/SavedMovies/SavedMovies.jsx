@@ -11,13 +11,24 @@ function SavedMovies({
   favoriteList,
   onDelete,
   isLoading,
-  moviesList,
+  shortFavoriteFilmsOnly,
   filterShortFilms,
   filterMoviesByName,
+  checkBoxStatus,
 }) {
+  function moviesMiddleware() {
+    if (checkBoxStatus === true) {
+      return favoriteList.filter((item) => item.duration < 40);
+    } else {
+      return favoriteList;
+    }
+  }
+  
   return (
     <div className="savedMovies">
       <SearchForm
+        shortFavoriteFilmsOnly={shortFavoriteFilmsOnly}
+        checkBoxStatus={checkBoxStatus}
         filterMoviesByName={filterMoviesByName}
         filteredList={filteredList}
         filterShortFilms={filterShortFilms}
@@ -28,12 +39,10 @@ function SavedMovies({
       />
       <MoviesCardList
         filterMoviesByName={filterMoviesByName}
-        filteredList={filteredList}
-        moviesList={moviesList}
         isLoading={isLoading}
         onDelete={onDelete}
         isMovieFound={isMovieFound}
-        favoriteList={favoriteList}
+        favoriteList={moviesMiddleware()}
       />
     </div>
   );
