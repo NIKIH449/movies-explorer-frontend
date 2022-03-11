@@ -1,13 +1,34 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useLocation } from 'react-router';
 import './MoviesCard.css';
 
-function MoviesCard({ movie }) {
-  const [isFavorite, setIsFavorite] = useState(false);
+function MoviesCard({ movie, onDelete, onLike, favoriteList }) {
   const { pathname } = useLocation();
+
+  function isFavorite() {
+    return favoriteList.some((item) => item.movieId === movie.id);
+  }
+  
+  const movieImage =
+    movie.image.url === undefined
+      ? movie.image
+      : `https://api.nomoreparties.co${movie.image.url}`;
+
+  const trailer =
+    movie.trailer === undefined ? movie.trailerLink : movie.trailer;
+
   const transformDuration = () => {
     return `${Math.floor(movie.duration / 60)}ч ${movie.duration % 60}м`;
   };
+
+  function addToFavorite() {
+    onLike(movie);
+  }
+
+  function deleteMovie() {
+    onDelete(movie);
+  }
+
   return (
     <div className="moviesCard">
       <div className="moviesCard__container">
@@ -17,20 +38,27 @@ function MoviesCard({ movie }) {
         </div>
         {pathname === '/movies' ? (
           <button
-            onClick={() => setIsFavorite(isFavorite === false ? true : false)}
+            type="submit"
+            onClick={isFavorite() ? deleteMovie : addToFavorite}
             className={`moviesCard__favorite-button ${
-              isFavorite && `moviesCard__favorite-button_acitve`
+              isFavorite() && `moviesCard__favorite-button_acitve`
             }`}
           ></button>
         ) : (
-          <button className="moviesCard__delete-button"></button>
+          <button
+            type="submit"
+            onClick={deleteMovie}
+            className="moviesCard__delete-button"
+          ></button>
         )}
       </div>
-      <img
-        src={`https://api.nomoreparties.co/${movie.image.formats.thumbnail.url}`}
-        alt={movie.nameRU}
-        className="moviesCard__poster"
-      ></img>
+      <a href={trailer} target="_blank">
+        <img
+          src={movieImage}
+          alt={movie.nameRU}
+          className="moviesCard__poster"
+        ></img>
+      </a>
     </div>
   );
 }

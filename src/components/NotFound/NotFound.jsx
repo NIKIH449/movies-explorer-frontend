@@ -2,7 +2,7 @@ import React from 'react';
 import Navigation from '../Navigation/Navigation';
 import './NotFound.css';
 function NotFound({ background }) {
-  console.log(background);
+  (background);
   return (
     <div className="notFound">
       <div>

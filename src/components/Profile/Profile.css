@@ -87,3 +87,6 @@
     width: 260px;
   }
 }
+.profile__button_disabled {
+  opacity: 0.5;
+}
